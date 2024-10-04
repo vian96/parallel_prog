@@ -8,7 +8,7 @@ int main() {
     #pragma omp threadprivate(a)
     #pragma omp threadprivate(b)
 
-    a = 10;
+    a = omp_get_thread_num();
 
     #pragma omp parallel copyin(a)
         printf("Thread %d: a = %d\n", omp_get_thread_num(), a);
