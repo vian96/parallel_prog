@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <omp.h>
 
 #define BLOCK_SIZE 16
 
@@ -8,6 +9,7 @@ void matmul(const std::vector<std::vector<double>>& A,
             std::vector<std::vector<double>>& C) {
     int n = A.size();
 
+    #pragma omp parallel for collapse(2)
     for (int i = 0; i < n; i += BLOCK_SIZE) {
         for (int j = 0; j < n; j += BLOCK_SIZE) {
             for (int k = 0; k < n; k += BLOCK_SIZE) {
@@ -28,6 +30,7 @@ void matmul_un(const std::vector<std::vector<double>>& A,
             std::vector<std::vector<double>>& C) {
     int n = A.size();
 
+    #pragma omp parallel for collapse(2)
     for (int ii = 0; ii < n; ++ii) {
         for (int jj = 0; jj < n; ++jj) {
             for (int kk = 0; kk < n; ++kk) {
@@ -43,7 +46,7 @@ int main() {
     std::vector<std::vector<double>> B(n, std::vector<double>(n, 1.0));
     std::vector<std::vector<double>> C(n, std::vector<double>(n, 0.0));
 
-    matmul_un(A, B, C);
+    matmul(A, B, C);
 
     std::cout << "Matrix multiplication completed!" << std::endl;
     return 0;
