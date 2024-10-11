@@ -1,8 +1,12 @@
 #include <iostream>
 #include <vector>
 #include <omp.h>
+#include <fstream>
+#include <chrono>
 
 #define BLOCK_SIZE 16
+
+using namespace std::chrono;
 
 void matmul(const std::vector<std::vector<double>>& A,
             const std::vector<std::vector<double>>& B,
@@ -34,21 +38,34 @@ void matmul_un(const std::vector<std::vector<double>>& A,
     for (int ii = 0; ii < n; ++ii) {
         for (int jj = 0; jj < n; ++jj) {
             for (int kk = 0; kk < n; ++kk) {
-                C[ii][jj] += A[ii][kk] * B[kk][jj];
+                C[ii][jj] += A[ii][kk] * B[jj][kk];
             }
         }
     }
 }
 
 int main() {
-    int n = 2048; // Matrix size (nxn)
-    std::vector<std::vector<double>> A(n, std::vector<double>(n, 1.0));
-    std::vector<std::vector<double>> B(n, std::vector<double>(n, 1.0));
-    std::vector<std::vector<double>> C(n, std::vector<double>(n, 0.0));
+    std::ofstream out("stats_mt.csv");
+    out << "n,t,type\n";
+    for (int n = 32; n<=2048; n *= 4) {
+        std::cout << n << std::endl;
+        std::vector<std::vector<double>> A(n, std::vector<double>(n, 1.0));
+        std::vector<std::vector<double>> B(n, std::vector<double>(n, 1.0));
+        std::vector<std::vector<double>> C(n, std::vector<double>(n, 0.0));
 
-    matmul(A, B, C);
+        auto begin = std::chrono::high_resolution_clock::now();
+        matmul(A, B, C);
+        auto end = std::chrono::high_resolution_clock::now();
+        out << n << ',' << duration_cast<microseconds>(end-begin).count() << ",block\n";
 
-    std::cout << "Matrix multiplication completed!" << std::endl;
+        begin = std::chrono::high_resolution_clock::now();
+        matmul_un(A, B, C);
+        end = std::chrono::high_resolution_clock::now();
+        out << n << ',' << duration_cast<microseconds>(end-begin).count() << ",simple\n";
+
+
+        std::cout << "Matrix multiplication completed!" << std::endl;
+    }
     return 0;
 }
 
