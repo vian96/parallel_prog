@@ -1,2 +1,1 @@
-g++ tst.cpp -O2 -fopenmp
-time ./a.out
+g++ simd.cpp -O2 -fopenmp -mavx -march=native && time ./a.out
