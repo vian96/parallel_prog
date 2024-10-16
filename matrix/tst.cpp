@@ -45,23 +45,32 @@ void matmul_un(const std::vector<std::vector<double>>& A,
 }
 
 int main() {
-    std::ofstream out("stats_mt.csv");
-    out << "n,t,type\n";
+    //std::ofstream out("stats_mt.csv");
+  //  out << "n,t,type\n";
     for (int n = 32; n<=2048; n *= 4) {
         std::cout << n << std::endl;
         std::vector<std::vector<double>> A(n, std::vector<double>(n, 1.0));
         std::vector<std::vector<double>> B(n, std::vector<double>(n, 1.0));
         std::vector<std::vector<double>> C(n, std::vector<double>(n, 0.0));
+        std::vector<std::vector<double>> D(n, std::vector<double>(n, 0.0));
 
         auto begin = std::chrono::high_resolution_clock::now();
         matmul(A, B, C);
         auto end = std::chrono::high_resolution_clock::now();
-        out << n << ',' << duration_cast<microseconds>(end-begin).count() << ",block\n";
+//        out << n << ',' << duration_cast<microseconds>(end-begin).count() << ",block\n";
 
         begin = std::chrono::high_resolution_clock::now();
-        matmul_un(A, B, C);
+        matmul_un(A, B, D);
+        bool equal = true;
+        for (int i =0; i < n; i++)
+                for (int j=0; j < n; j++)
+                    if (C[i][j] != D[i][j]) {
+                    equal = false;
+                    std::cout << "wrong value\n";
+                    return 0;
+                }
         end = std::chrono::high_resolution_clock::now();
-        out << n << ',' << duration_cast<microseconds>(end-begin).count() << ",simple\n";
+  //      out << n << ',' << duration_cast<microseconds>(end-begin).count() << ",simple\n";
 
 
         std::cout << "Matrix multiplication completed!" << std::endl;

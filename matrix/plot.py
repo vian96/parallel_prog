@@ -11,6 +11,7 @@ df4 = pd.read_csv('stats_mt.csv')
 df4['type'] += ' T multi'
 
 df = pd.concat([df2, df1, df3, df4])
+df = pd.read_csv('csv_simd.csv')
 fig = px.bar(df, x='n', y='t', color='type', barmode='group')
 fig.write_html('stats.html', auto_open=True)
 
