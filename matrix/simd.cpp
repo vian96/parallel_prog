@@ -75,7 +75,6 @@ void matmul3(const std::vector<std::vector<double>>& A,
 void matmul4(const std::vector<std::vector<double>>& A,
             const std::vector<std::vector<double>>& B,
             std::vector<std::vector<double>>& C) {
-    // all matrices' dimensions are assumed to be divisible by 4
     int n = A.size();
 
     #pragma omp parallel for collapse(2)
