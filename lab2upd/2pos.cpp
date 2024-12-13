@@ -29,12 +29,12 @@ int main(int argc, char **argv) {
   auto duration = duration_cast<microseconds>(stop - start);
   printf("time: %ld\n", duration.count());
 
-  ff = fopen("2result.txt", "w");
-  for (i = 0; i < ISIZE; i++) {
-    for (j = 0; j < JSIZE; j++) {
-      fprintf(ff, "%f ", a[i][j]);
-    }
-    fprintf(ff, "\n");
-  }
-  fclose(ff);
+//  ff = fopen("2result.txt", "w");
+//  for (i = 0; i < ISIZE; i++) {
+//    for (j = 0; j < JSIZE; j++) {
+//      fprintf(ff, "%f ", a[i][j]);
+//    }
+//    fprintf(ff, "\n");
+//  }
+//  fclose(ff);
 }

@@ -68,24 +68,25 @@ int main(int argc, char **argv) {
   MPI_Barrier(MPI_COMM_WORLD);
   auto stop = high_resolution_clock::now();
   auto duration = duration_cast<microseconds>(stop - start);
-  fprintf(stderr, "r:%d, time: %ld\n", rank, duration.count());
+  if (rank == 0)
+    fprintf(stderr, "r:%d, time: %ld\n", rank, duration.count());
 
-  if (rank == 0) {
- //   printf("%d trying\n", rank);
-    ff = fopen("3result_mt.txt", "w");
-   // printf("p=%p\n", ff);
-    //printf("%d opened\n", rank);
-    for (i = 0; i < ISIZE; i++) {
-      //fprintf(stderr, "%d %d %d\n", rank, i, ISIZE);
-      for (j = 0; j < JSIZE; j++) {
-     //   printf("%d %d %d\n", rank, i, j);
-        fprintf(ff, "%f ", res[i][j]);
-        //printf("%f ", res[i][j]);
-      }
-      fprintf(ff, "\n");
-      //printf("\n");
-    }
-    fclose(ff);
-  }
+//  if (rank == 0) {
+// //   printf("%d trying\n", rank);
+//    ff = fopen("3result_mt.txt", "w");
+//   // printf("p=%p\n", ff);
+//    //printf("%d opened\n", rank);
+//    for (i = 0; i < ISIZE; i++) {
+//      //fprintf(stderr, "%d %d %d\n", rank, i, ISIZE);
+//      for (j = 0; j < JSIZE; j++) {
+//     //   printf("%d %d %d\n", rank, i, j);
+//        fprintf(ff, "%f ", res[i][j]);
+//        //printf("%f ", res[i][j]);
+//      }
+//      fprintf(ff, "\n");
+//      //printf("\n");
+//    }
+//    fclose(ff);
+//  }
   MPI_Finalize();
 }

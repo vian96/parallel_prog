@@ -1,1 +1,1 @@
-mpirun -np 8 ./main $2 $3 # && python3 plot.py $1
+mpirun -np $2 ./main${1} # && python3 plot.py $1
